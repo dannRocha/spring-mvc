@@ -1,19 +1,30 @@
 package com.learn.spring.mvc.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.validation.BindingResult;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import com.learn.spring.mvc.expection.UserNotFoundException;
 import com.learn.spring.mvc.model.User;
 import com.learn.spring.mvc.repository.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.validation.Valid;
 
-@Controller
+@RestController
+@RequestMapping("api/v1")
 public class UserController {
 
   private final UserRepository repository;
@@ -21,37 +32,48 @@ public class UserController {
   public UserController(UserRepository repository) {
     this.repository = repository;
   }
-
-
+  
+  
   @GetMapping("/users")
-  public ModelAndView users() {
-    var modelAndView = new ModelAndView();
-
-    modelAndView.setViewName("usersView");
-    modelAndView.addObject("users", repository.getAllUsers());
-
-    return modelAndView;
+  public List<User> users() {
+	  return repository.findAll();
   }
-
-  @GetMapping("/register")
-  public ModelAndView register() {
-    var modelAndView = new ModelAndView();
+  
+  @GetMapping("/users/{id}")
+  public ResponseEntity<Optional<User>> findById(@PathVariable Long id) {
+	  var user = repository.findById(id);
+	  if(!user.isPresent()) {
+		 return ResponseEntity.notFound().build();
+	  }
+	  
+	  return ResponseEntity.ok(user);
+  }
+  
+  @PostMapping("/users")
+  @ResponseStatus(HttpStatus.CREATED)
+  public User createUser(@Valid @RequestBody User user) {
+	  repository.save(user);
+	  return user;
+  }
+  
+  @PutMapping("/users")
+  public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
     
-    modelAndView.setViewName("registerView");
-    modelAndView.addObject("user", new User());
-
-    return modelAndView;
-  }
-
-  @PostMapping("/user")
-  public String registerUser(@Valid @ModelAttribute User user, BindingResult result) {
-
-    if(result.hasErrors()) {
-      return "registerView";
+	var userEntity = repository.findById(user.getId());
+    if(!userEntity.isPresent()) {
+      return ResponseEntity.notFound().build();
     }
-
-    repository.save(user);
-
-    return "redirect:users";
+    
+	return ResponseEntity.ok(repository.save(user));
+  }
+  
+  @DeleteMapping("/users/{id}")
+  public ResponseEntity<Optional<User>> deleteById(@PathVariable Long id) {
+    var user = repository.findById(id);
+    if(!user.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+	
+    return ResponseEntity.ok(repository.delete(user.get()));
   }
 }
