@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Usuários</h1>
+  <button onclick="location.assign('/register')">Registrar</button>
+  <table border="1">
+    <thead>
+      <tr>
+        <td>Nome</td>
+        <td>Email</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="user : ${users}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
