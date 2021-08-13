@@ -1,4 +1,4 @@
-package com.learn.spring.mvc.spring.mvc.model;
+package com.learn.spring.mvc.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Email;

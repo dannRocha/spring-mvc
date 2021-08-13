@@ -1,7 +1,7 @@
-package com.learn.spring.mvc.spring.mvc.repository;
+package com.learn.spring.mvc.repository;
 
 import org.springframework.stereotype.Repository;
-import com.learn.spring.mvc.spring.mvc.model.User;
+import com.learn.spring.mvc.model.User;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.learn.spring.mvc.spring.mvc.controller;
+package com.learn.spring.mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindingResult;
 
-import com.learn.spring.mvc.spring.mvc.model.User;
-import com.learn.spring.mvc.spring.mvc.repository.UserRepository;
+import com.learn.spring.mvc.model.User;
+import com.learn.spring.mvc.repository.UserRepository;
 
 import javax.validation.Valid;
-
-
-import java.util.List;
 
 @Controller
 public class UserController {
